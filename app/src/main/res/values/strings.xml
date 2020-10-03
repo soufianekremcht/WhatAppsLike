@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhatAppsLike</string>
+    <string name="empty_chat_msg">You don\'t have any messages in this conversation yet, time to start it up!</string>
+    <string name="random_long_text">Sent messagesdfdsfsdfkjsdfiosdfjspodifjsdf sdfoisdfjosdifpsdfjsdifjsdfo idsfjps sfoisdfjio</string>
+</resources>

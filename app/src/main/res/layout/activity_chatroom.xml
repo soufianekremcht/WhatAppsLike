@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chatroom_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/chat_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/chatroom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.ThemeOverLay">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/chatroom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="User Name"
+            app:popupTheme="@style/AppTheme.PopUpOverlay"
+            style="@style/style_app_toolbar"
+            app:titleTextColor="@color/accent_white"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.l4digital.fastscroll.FastScrollRecyclerView
+            android:id="@+id/chatroom_message_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:alpha="225"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
+            app:bubbleSize="small" />
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/chatroom_reply_bar_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-24dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+
+        app:cardCornerRadius="24dp"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <ProgressBar
+                android:id="@+id/send_progress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:indeterminate="true"
+                android:visibility="invisible" />
+
+            <HorizontalScrollView
+                android:id="@+id/attached_image_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/attached_image_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:orientation="horizontal"/>
+
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:id="@+id/send_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_normal"
+                android:clipToPadding="false"
+                android:gravity="center_vertical|start"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:translationY="-2dp">
+
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageButton
+                        android:id="@+id/chatroom_attach_file"
+                        android:layout_width="32dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_vertical|start"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:contentDescription="Attach"
+                        android:src="@drawable/ic_attach_file_white"
+                        android:tint="@color/accent_white" />
+
+                    <TextView
+                        android:id="@+id/text_counter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:text="Counter"/>
+
+                </FrameLayout>
+
+                <EditText
+                    android:id="@+id/chatroom_message_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:hint="Type Message"
+                    android:imeOptions="actionSend|flagNoExtractUi"
+                    android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+                    android:maxLines="25"
+                    android:minHeight="40dp"
+                    android:padding="@dimen/spacing_normal"
+                    android:scrollHorizontally="false"
+                    android:textSize="16sp"
+                    android:textColorHint="@color/accent_white_transparent"
+                    android:textColor="@color/accent_white"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/chatroom_send_msg_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:contentDescription="Send Message"
+                    android:src="@drawable/ic_send_white"
+                    app:fabSize="mini"
+                    app:rippleColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <!--<ViewStub
+                android:id="@+id/attach_stub"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/attach_menu_height"
+                android:layout="@layout/view_attach_menu" />-->
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

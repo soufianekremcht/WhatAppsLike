@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/spacing_small"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?selectableItemBackground">
+
+
+
+    <FrameLayout
+        android:id="@+id/icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_normal">
+
+        <RelativeLayout
+            android:id="@+id/icon_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/icon_width_height"
+                android:layout_height="@dimen/icon_width_height"
+                android:src="@drawable/bg_circle" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_done_white" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icon_front"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_profile"
+                android:layout_width="@dimen/icon_width_height"
+                android:layout_height="@dimen/icon_width_height"
+                android:src="@drawable/bg_circle"/>
+
+            <TextView
+                android:id="@+id/icon_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:textSize="22dp"
+                android:text="C"/>
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/message_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/icon_container"
+        android:padding="@dimen/spacing_normal"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/message_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="@dimen/font_normal"
+            android:textStyle="bold"
+            android:text="CIH Bank"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/message_timestamp"/>
+
+        <TextView
+            android:id="@+id/last_message_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="@dimen/font_small"
+            android:layout_below="@+id/message_sender"
+            android:text="Failed Logo stuff"/>
+        <TextView
+            android:id="@+id/message_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textSize="@dimen/font_small"
+            android:textStyle="bold"
+            android:text="Wed"
+            />
+
+    </RelativeLayout>
+</RelativeLayout>

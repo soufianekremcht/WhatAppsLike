@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/thread_message_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/spacing_normal"
+    android:layout_margin="@dimen/spacing_small">
+
+    <LinearLayout
+        android:id="@+id/sent_message_attachments_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:id="@+id/sent_message_play_outline"
+        android:layout_width="@dimen/play_outline_size"
+        android:layout_height="@dimen/play_outline_size"
+        android:layout_alignEnd="@+id/sent_message_attachments_holder"
+        android:layout_alignBottom="@+id/sent_message_attachments_holder"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:src="@drawable/ic_outline_play_circle_white"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sent_message_attachments_holder"
+        android:background="@drawable/item_sent_background"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/spacing_small">
+
+        <TextView
+            android:id="@+id/sent_msg_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_small"
+            android:text="7:13 PM"
+            android:textColor="@color/accent_white"
+            android:textSize="@dimen/font_small"
+            android:layout_gravity="bottom"
+            />
+
+        <TextView
+            android:id="@+id/sent_message_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="email|web"
+            android:padding="@dimen/spacing_normal"
+            android:text="@string/random_long_text"
+            android:textColor="@color/accent_white"
+            android:textSize="@dimen/font_normal" />
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
