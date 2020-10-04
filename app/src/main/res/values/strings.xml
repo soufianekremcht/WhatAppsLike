@@ -2,4 +2,7 @@
     <string name="app_name">WhatAppsLike</string>
     <string name="empty_chat_msg">You don\'t have any messages in this conversation yet, time to start it up!</string>
     <string name="random_long_text">Sent messagesdfdsfsdfkjsdfiosdfjspodifjsdf sdfoisdfjosdifpsdfjsdifjsdfo idsfjps sfoisdfjio</string>
+    <string name="no_internet_msg">Oops , No Internet Connection, You need to be connected to access this page</string>
+    <string name="no_chat_msg">you did not write or receive any message for the moment.</string>
+    <string name="now">Now</string>
 </resources>

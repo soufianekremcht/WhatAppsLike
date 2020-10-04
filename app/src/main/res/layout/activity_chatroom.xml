@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chatroom_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/chat_background"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
+
 >
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,25 +24,23 @@
             app:popupTheme="@style/AppTheme.PopUpOverlay"
             style="@style/style_app_toolbar"
             app:titleTextColor="@color/accent_white"/>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+
+    <com.l4digital.fastscroll.FastScrollRecyclerView
+        android:id="@+id/chatroom_message_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <com.l4digital.fastscroll.FastScrollRecyclerView
-            android:id="@+id/chatroom_message_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginEnd="@dimen/spacing_small"
-            android:alpha="225"
-            android:clipToPadding="false"
-            android:paddingBottom="12dp"
-            app:bubbleSize="small" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:alpha="225"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp"
+        app:bubbleSize="small"
+        android:layout_below="@id/chatroom_app_bar"
+        android:layout_above="@id/chatroom_reply_bar_card"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/chatroom_reply_bar_card"
@@ -51,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="-24dp"
         app:cardBackgroundColor="@color/colorPrimaryDark"
-
+        android:layout_alignParentBottom="true"
         app:cardCornerRadius="24dp"
         app:cardElevation="5dp">
 
@@ -173,4 +170,4 @@
 
     </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>

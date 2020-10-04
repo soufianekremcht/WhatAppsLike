@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.luisppinheiroj.whatappslike">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -10,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.main.MainActivity">
+
+        <activity android:name=".ui.authentication.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +22,16 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".ui.authentication.RegisterActivity"
+            android:parentActivityName=".ui.authentication.LoginActivity"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".ui.main.MainActivity">
+        </activity>
+
         <activity android:name=".ui.chat_room.ChatRoomActivity"
-            android:parentActivityName=".ui.main.MainActivity"/>
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".ui.new_chat.NewChatActivity"
             android:parentActivityName=".ui.main.MainActivity">

@@ -11,14 +11,18 @@ import com.l4digital.fastscroll.FastScroller
 import com.luisppinheiroj.whatappslike.R
 import com.luisppinheiroj.whatappslike.data.model.ChatMessage
 import com.luisppinheiroj.whatappslike.helper.AppHelper
+import com.luisppinheiroj.whatappslike.helper.InputHelper
+import com.luisppinheiroj.whatappslike.helper.MyTimeUtils
 import kotlinx.android.synthetic.main.item_received_msg.view.*
 import kotlinx.android.synthetic.main.item_sent_msg.view.*
 
-class ChatRoomAdapter(var mContext :Context,var chatMessages : ArrayList<ChatMessage>):
-    RecyclerView.Adapter<ChatRoomAdapter.ChatRoomViewHolder>(),FastScroller.SectionIndexer {
+class MessagesAdapter(var mContext :Context, var chatMessages : ArrayList<ChatMessage>):
+    RecyclerView.Adapter<MessagesAdapter.ChatRoomViewHolder>(),FastScroller.SectionIndexer {
 
     val VIEW_RECEIVED_MESSAGE :Int = 0
     val VIEW_SENT_MESSAGE :Int = 1
+
+    var group_chat : Boolean = true
 
     override fun getItemViewType(position: Int): Int {
         return if (chatMessages[position].isReceived)
@@ -49,12 +53,12 @@ class ChatRoomAdapter(var mContext :Context,var chatMessages : ArrayList<ChatMes
 
     fun add(newChatMessage :ChatMessage){
         chatMessages.add(newChatMessage)
-        notifyItemInserted(itemCount)
+        notifyItemInserted(itemCount-1)
     }
     fun addAll(newChatMessages: List<ChatMessage>){
         chatMessages.clear()
         chatMessages.addAll(newChatMessages)
-        notifyItemInserted(itemCount -1)
+        notifyDataSetChanged()
     }
 
 
@@ -75,17 +79,31 @@ class ChatRoomAdapter(var mContext :Context,var chatMessages : ArrayList<ChatMes
         fun onBind(position: Int){
             val message : ChatMessage = chatMessages[position]
             if (message.isReceived){
-                val receivedMessageBody: TextView = itemView.received_message_body
-                val receivedMessageSenderPhotoText : TextView = itemView.received_msg_sender_photo_text
-                val receivedMessageSenderPhoto : ImageView = itemView.received_msg_sender_photo
+                val receivedMsgBody: TextView = itemView.received_msg_body
+                val receivedMsgSenderPhotoText : TextView = itemView.received_msg_sender_photo_text
+                val receivedMsgSenderPhoto : ImageView = itemView.received_msg_sender_photo
+                val receivedMsgSenderName : TextView = itemView.received_msg_sender_name
+                val receivedMsgDate : TextView = itemView.received_msg_date_text
 
-                receivedMessageBody.text = message.body
-                receivedMessageSenderPhotoText.text = message.sender.name.substring(0,1)
-                receivedMessageSenderPhoto.setColorFilter(AppHelper.getRandomMaterialColor(mContext,
-                    "400"))
+                receivedMsgSenderName.text = "Name"
+                receivedMsgDate.text = MyTimeUtils.formatTimestamp(mContext,message.date)
+
+                // show sender name
+                receivedMsgSenderName.visibility = View.VISIBLE
+
+                receivedMsgBody.text = message.body
+
+                if (!InputHelper.isEmpty(message.sender.name))
+                    receivedMsgSenderPhotoText.text = message.sender.name.substring(0,1)
+
+                receivedMsgSenderPhoto.setColorFilter(
+                    AppHelper.getRandomMaterialColor(mContext, "400"))
 
             }else{
                 val sentMessageBody :TextView = itemView.sent_message_body
+                val sentMsgTimestamp : TextView = itemView.sent_msg_date_text
+
+                sentMsgTimestamp.text = MyTimeUtils.formatTimestamp(mContext,message.date)
                 sentMessageBody.text = message.body
             }
 
@@ -95,6 +113,6 @@ class ChatRoomAdapter(var mContext :Context,var chatMessages : ArrayList<ChatMes
     }
 
     override fun getSectionText(position: Int): CharSequence {
-        return getItem(position).body.substring(0,3)
+        return getItem(position).body.substring(0,1)
     }
 }

@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <merge>
     <LinearLayout
-        android:id="@+id/empty_list_layout"
+        android:id="@+id/empty_users_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NO Conversations Here."
-            android:textSize="@dimen/font_large"
+            android:text="No Group Chat"
+            android:textSize="30sp"
             android:padding="@dimen/spacing_normal"
             android:layout_margin="@dimen/spacing_normal"
             android:textStyle="bold"
             android:layout_gravity="center"
             android:gravity="center"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_chat_msg"
+            android:textSize="@dimen/font_large"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
     </LinearLayout>
+
 </merge>

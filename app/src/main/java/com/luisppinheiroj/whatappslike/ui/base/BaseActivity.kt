@@ -8,8 +8,7 @@ import com.luisppinheiroj.whatappslike.ui.base.mvp.BaseMvp
 import es.dmoral.toasty.Toasty
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(),
-    BaseMvp.View{
+open class BaseActivity : AppCompatActivity(), BaseMvp.View{
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

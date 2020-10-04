@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/network_error_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Internet Connection"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:padding="@dimen/spacing_normal"
+            android:layout_margin="@dimen/spacing_normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_internet_msg"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/font_large"
+            android:padding="@dimen/spacing_normal"
+            android:layout_margin="@dimen/spacing_normal"/>
+        <Button
+            android:id="@+id/no_internet_reload_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reload"/>
+
+
+
+    </LinearLayout>
+</merge>

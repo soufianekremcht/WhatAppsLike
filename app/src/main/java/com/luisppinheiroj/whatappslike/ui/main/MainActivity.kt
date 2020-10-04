@@ -1,7 +1,10 @@
 package com.luisppinheiroj.whatappslike.ui.main
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -9,7 +12,12 @@ import androidx.fragment.app.FragmentTransaction
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.ktx.Firebase
 import com.luisppinheiroj.whatappslike.R
+import com.luisppinheiroj.whatappslike.ui.authentication.LoginActivity
 import com.luisppinheiroj.whatappslike.ui.base.BaseActivity
 import com.luisppinheiroj.whatappslike.ui.chats.ChatsFragment
 import com.luisppinheiroj.whatappslike.ui.new_chat.NewChatActivity
@@ -19,8 +27,6 @@ class MainActivity : BaseActivity(),MainMvp.View {
     @BindView(R.id.main_toolbar)
     lateinit var mainToolbar : Toolbar
 
-//    @BindView(R.id.navigation)
-//    lateinit var bottomNav : BottomNavigationView
 
     @BindView(R.id.new_chat_fab)
     lateinit var newChatFab : FloatingActionButton
@@ -33,9 +39,8 @@ class MainActivity : BaseActivity(),MainMvp.View {
         ButterKnife.bind(this)
         mPresenter = MainPresenter()
         mPresenter.onAttach(this)
-
+        mainToolbar.title = "Chats"
         setSupportActionBar(mainToolbar)
-        //bottomNav.setOnNavigationItemSelectedListener(this)
         newChatFab.setOnClickListener{
             showNewChatActivity()
         }
@@ -48,15 +53,40 @@ class MainActivity : BaseActivity(),MainMvp.View {
             R.id.bottom_nav_chats -> showChatsFragment()
             R.id.bottom_nav_search -> showChatsFragment()
         }
-        return true;
+        return true
     }
 
-    fun showNewChatActivity(){
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_main_logout -> {
+                userLogout()
+                return true
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun userLogout() {
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
+
+    }
+
+    private fun showNewChatActivity(){
         val intent : Intent = Intent(this,NewChatActivity::class.java)
         startActivity(intent)
     }
 
-    fun showChatsFragment(){
+    private fun showChatsFragment(){
         loadFragment(ChatsFragment.newInstance())
     }
 
@@ -68,6 +98,43 @@ class MainActivity : BaseActivity(),MainMvp.View {
         //transaction.addToBackStack(null)
         transaction.commit()
     }
+
+
+
+    private fun getCurrentUserInfo(){
+        val user = Firebase.auth.currentUser
+        user?.let {
+            // Name, email address, and profile photo Url
+            val name = user.displayName
+            val email = user.email
+            val photoUrl = user.photoUrl
+
+            // Check if user's email is verified
+            val emailVerified = user.isEmailVerified
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getToken() instead.
+            val uid = user.uid
+        }
+    }
+
+    private fun updateUserInfo(){
+        val user = Firebase.auth.currentUser
+        val profileUpdates = userProfileChangeRequest {
+            displayName = "Jane Q. User"
+            photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
+        }
+
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("MainActivity", "User profile updated.")
+                }
+            }
+    }
+
+
 
 
 }

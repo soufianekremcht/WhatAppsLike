@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/thread_message_wrapper"
+<RelativeLayout android:id="@+id/received_msg_wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/spacing_normal"
-    android:layout_margin="@dimen/spacing_small">
+    android:layout_margin="@dimen/spacing_small"
+    android:background="?selectableItemBackground">
 
     <RelativeLayout
         android:id="@+id/received_msg_sender_photo_layout"
@@ -42,7 +43,7 @@
         android:orientation="vertical" />
 
     <ImageView
-        android:id="@+id/received_message_play_outline"
+        android:id="@+id/received_msg_play_outline"
         android:layout_width="@dimen/play_outline_size"
         android:layout_height="@dimen/play_outline_size"
         android:layout_alignEnd="@+id/received_msg_attachments_holder"
@@ -51,17 +52,28 @@
         android:layout_marginBottom="@dimen/activity_margin"
         android:src="@drawable/ic_outline_play_circle_white"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/received_msg_sender_name"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_toEndOf="@id/received_msg_sender_photo_layout"
+        android:layout_margin="@dimen/spacing_tiny"
+        android:text="name"
+        android:textSize="@dimen/font_small"
+        android:textStyle="bold"/>
+
     <LinearLayout
         android:id="@+id/received_msg_body_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/item_received_background"
-        android:layout_below="@+id/received_msg_attachments_holder"
+        android:layout_below="@+id/received_msg_sender_name"
         android:layout_toEndOf="@+id/received_msg_sender_photo_layout"
         android:padding="@dimen/spacing_small">
 
         <TextView
-            android:id="@+id/received_message_body"
+            android:id="@+id/received_msg_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
