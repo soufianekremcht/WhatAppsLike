@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NO Conversations Here."
+            android:text="@string/no_conversations_here"
             android:textSize="@dimen/font_large"
             android:padding="@dimen/spacing_normal"
             android:layout_margin="@dimen/spacing_normal"

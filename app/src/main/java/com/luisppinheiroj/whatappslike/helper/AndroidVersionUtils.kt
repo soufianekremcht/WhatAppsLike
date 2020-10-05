@@ -3,6 +3,7 @@ package com.luisppinheiroj.whatappslike.helper
 import android.os.Build
 
 object AndroidVersionUtil {
+
     val isAndroidR: Boolean
         get() = Build.VERSION.SDK_INT > Build.VERSION_CODES.Q || Build.VERSION.CODENAME == "R"
 

@@ -4,35 +4,38 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/spacing_normal"
+    android:padding="@dimen/spacing_small"
     android:layout_margin="@dimen/spacing_small"
     android:background="?selectableItemBackground">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/received_msg_sender_photo_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/received_msg_body_layout"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="@dimen/spacing_normal"
-        android:layout_marginTop="@dimen/spacing_large">
+        android:layout_marginTop="@dimen/spacing_large"
+        >
 
         <ImageView
             android:id="@+id/received_msg_sender_photo"
             android:layout_width="@dimen/md_icon_size"
             android:layout_height="@dimen/md_icon_size"
             android:visibility="visible"
-            android:src="@drawable/bg_circle"/>
+            android:src="@drawable/bg_circle"
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/received_msg_sender_photo_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_large"
-            android:text="C"/>
-    </RelativeLayout>
+            android:text="C"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
 
     <LinearLayout
@@ -59,7 +62,7 @@
         android:layout_height="15dp"
         android:layout_toEndOf="@id/received_msg_sender_photo_layout"
         android:layout_margin="@dimen/spacing_tiny"
-        android:text="name"
+        android:text="Sender name"
         android:textSize="@dimen/font_small"
         android:textStyle="bold"/>
 
@@ -78,7 +81,7 @@
             android:layout_height="wrap_content"
 
             android:autoLink="email|web"
-            android:padding="@dimen/spacing_normal"
+            android:padding="@dimen/spacing_small"
             android:textSize="@dimen/font_normal"
             android:textColor="@color/accent_white"
             tools:text="Received message" />
@@ -90,10 +93,9 @@
             android:text="7:13 PM"
             android:textSize="@dimen/font_small"
             android:textColor="@color/accent_white"
-            android:padding="@dimen/spacing_tiny"
+            android:padding="@dimen/spacing_small"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/spacing_small"/>
-
 
     </LinearLayout>
 

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/font_large"
-        android:text="SIGN IN PAGE"
+        android:text="@string/register_page"
         android:textStyle="bold"
         android:padding="@dimen/spacing_normal"
         android:layout_margin="@dimen/spacing_normal"/>
@@ -24,7 +24,7 @@
 
         app:hintAnimationEnabled="true"
         android:autofillHints="Name"
-        android:hint="Name"
+        android:hint="@string/name"
         style="@style/style_text_input_style">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -42,7 +42,7 @@
         style="@style/style_text_input_style"
         app:hintAnimationEnabled="true"
         android:autofillHints="Email"
-        android:hint="Email">
+        android:hint="@string/email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/register_email_field"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         app:hintAnimationEnabled="true"
         android:autofillHints="Password"
-        android:hint="Password"
+        android:hint="@string/password"
         style="@style/style_text_input_style">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         app:hintAnimationEnabled="true"
         android:autofillHints="Password"
-        android:hint="Repeat Password"
+        android:hint="@string/confirm_password"
         style="@style/style_text_input_style">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +88,24 @@
         android:id="@+id/user_register_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register"
+        style="@style/style_login_btn"/>
+
+    <TextView
+        android:id="@+id/register_login_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_normal"
+        android:text="@string/you_have_account_msg"
+        android:textStyle="bold"
+        android:padding="@dimen/spacing_small"
+        android:layout_margin="@dimen/spacing_small"/>
+
+    <Button
+        android:id="@+id/register_login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in"
         style="@style/style_login_btn"/>
 
 </LinearLayout>

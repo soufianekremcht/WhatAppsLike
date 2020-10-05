@@ -8,7 +8,7 @@ import androidx.annotation.Nullable
 import com.google.android.material.textfield.TextInputLayout
 
 object InputHelper {
-    val SPACE = "\u202F\u202F"
+    const val SPACE = "\u202F\u202F"
 
     private fun isWhiteSpaces(@Nullable s: String?): Boolean {
         return s != null && s.matches("\\s+".toRegex())

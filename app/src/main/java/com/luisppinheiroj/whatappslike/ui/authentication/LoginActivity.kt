@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.firebase.auth.FirebaseAuth
@@ -14,11 +13,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.luisppinheiroj.whatappslike.R
 import com.luisppinheiroj.whatappslike.helper.InputHelper
+import com.luisppinheiroj.whatappslike.ui.base.BaseActivity
 import com.luisppinheiroj.whatappslike.ui.main.MainActivity
-import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity: AppCompatActivity() {
+class LoginActivity: BaseActivity() {
 
     public val TAG : String = "login_activity"
 
@@ -51,7 +50,7 @@ class LoginActivity: AppCompatActivity() {
 
         loginBtn.setOnClickListener{
             if (InputHelper.isEmpty(emailField)|| InputHelper.isEmpty(passwordField)){
-                Toasty.error(this,"You Should Type Your Information").show()
+                onError("loginPage","You Should Type Your Information")
             }else{
                 auth.signInWithEmailAndPassword(
                     emailField.text.toString(),
@@ -63,9 +62,7 @@ class LoginActivity: AppCompatActivity() {
                             checkIfLogged(user)
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.exception)
-                            Toasty.normal(baseContext,
-                                "Authentication failed. "+ task.exception?.message).show()
+                            showMessage("Authentication failed. "+ task.exception?.message)
                             checkIfLogged(null)
                         }
                     }

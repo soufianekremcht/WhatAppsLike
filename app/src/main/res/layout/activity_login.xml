@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/font_large"
-        android:text="LOGIN PAGE"
+        android:text="@string/login_page"
         android:textStyle="bold"
         android:padding="@dimen/spacing_normal"
         android:layout_margin="@dimen/spacing_normal"/>
@@ -40,6 +40,7 @@
 
         app:hintAnimationEnabled="true"
         android:autofillHints="Password"
+
         android:hint="Password"
         style="@style/style_text_input_style">
 
@@ -55,7 +56,7 @@
         android:id="@+id/login_forget_password_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forgot your password ?"
+        android:text="@string/forgot_your_password"
         android:layout_margin="8dp"
 
         />
@@ -68,14 +69,16 @@
         style="@style/style_login_btn"/>
 
     <TextView
-        android:id="@+id/register_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/font_normal"
-        android:text="Don't have an account ? "
-        android:textStyle="bold"
-        android:padding="@dimen/spacing_small"
-        android:layout_margin="@dimen/spacing_small"/>
+    android:id="@+id/register_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/font_normal"
+    android:text="@string/don_t_have_an_account_msg"
+    android:textStyle="bold"
+    android:padding="@dimen/spacing_small"
+    android:layout_margin="@dimen/spacing_small"/>
+
+
     <Button
         android:id="@+id/register_btn"
         android:layout_width="match_parent"

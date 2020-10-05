@@ -18,8 +18,29 @@
             android:layout_height="wrap_content"
             app:popupTheme="@style/AppTheme.PopUpOverlay"
             style="@style/style_app_toolbar"
-            app:titleTextColor="@color/accent_white"/>
+            app:titleTextColor="@color/accent_white">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/main_toolbar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_large"
+                    android:textColor="@color/accent_white"/>
+                <TextView
+                    android:id="@+id/main_toolbar_sub_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_small"
+                    android:textColor="@color/accent_white"/>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <FrameLayout
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -36,7 +57,9 @@
         android:layout_margin="@dimen/activity_margin"
         android:layout_marginBottom="90dp"
         android:src="@drawable/ic_chat_white"
+
         />
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

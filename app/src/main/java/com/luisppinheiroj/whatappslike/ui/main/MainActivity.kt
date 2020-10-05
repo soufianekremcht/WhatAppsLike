@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,28 +21,26 @@ import com.luisppinheiroj.whatappslike.R
 import com.luisppinheiroj.whatappslike.ui.authentication.LoginActivity
 import com.luisppinheiroj.whatappslike.ui.base.BaseActivity
 import com.luisppinheiroj.whatappslike.ui.chats.ChatsFragment
-import com.luisppinheiroj.whatappslike.ui.new_chat.NewChatActivity
+import com.luisppinheiroj.whatappslike.ui.new_chat.CreateChatActivity
 
 
-class MainActivity : BaseActivity(),MainMvp.View {
+class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener{
     @BindView(R.id.main_toolbar)
     lateinit var mainToolbar : Toolbar
 
 
     @BindView(R.id.new_chat_fab)
-    lateinit var newChatFab : FloatingActionButton
+    lateinit var createNewChatFab : FloatingActionButton
 
-    private lateinit var mPresenter : MainPresenter<MainMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-        mPresenter = MainPresenter()
-        mPresenter.onAttach(this)
-        mainToolbar.title = "Chats"
+
         setSupportActionBar(mainToolbar)
-        newChatFab.setOnClickListener{
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        createNewChatFab.setOnClickListener{
             showNewChatActivity()
         }
         if (savedInstanceState == null)
@@ -82,7 +81,7 @@ class MainActivity : BaseActivity(),MainMvp.View {
     }
 
     private fun showNewChatActivity(){
-        val intent : Intent = Intent(this,NewChatActivity::class.java)
+        val intent : Intent = Intent(this,CreateChatActivity::class.java)
         startActivity(intent)
     }
 
@@ -133,8 +132,6 @@ class MainActivity : BaseActivity(),MainMvp.View {
                 }
             }
     }
-
-
 
 
 }

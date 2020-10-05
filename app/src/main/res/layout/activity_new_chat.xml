@@ -8,13 +8,13 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/new_chat_appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.ThemeOverLay">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/new_chat_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:popupTheme="@style/AppTheme.PopUpOverlay"
-            style="@style/style_app_toolbar"
             app:titleTextColor="@color/accent_white"
             >
 
@@ -27,6 +27,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/users_search_field"
             android:layout_width="match_parent"
@@ -46,14 +48,23 @@
             android:layout_height="wrap_content"
             android:text="Enable Group Chatting"
             android:padding="@dimen/spacing_normal"
-            android:layout_margin="@dimen/spacing_small"
-            android:backgroundTint="@color/accent_red"/>
+            android:layout_margin="@dimen/spacing_small" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/users_recycler_view"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/users_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/spacing_normal"/>
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/users_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/spacing_normal"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+        <include layout="@layout/view_network_error"
+            android:visibility="gone"/>
 
 
         <include layout="@layout/view_empty_list"/>

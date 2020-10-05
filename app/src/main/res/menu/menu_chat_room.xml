@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_messenger_participant"
-        android:title="participant"
+    <item android:id="@+id/menu_chatroom_participants"
+        android:title="Participant"
         android:icon="@drawable/ic_group_people_white"/>
+
+    <item android:id="@+id/menu_chatroom_add_user"
+        android:icon="@drawable/ic_group_add_user_white"
+        android:title="Add New User"
+        app:showAsAction="always"></item>
 
 </menu>

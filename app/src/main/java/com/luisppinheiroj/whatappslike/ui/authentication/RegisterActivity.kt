@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.firebase.auth.FirebaseAuth
@@ -20,11 +18,12 @@ import com.google.firebase.ktx.Firebase
 import com.luisppinheiroj.whatappslike.R
 import com.luisppinheiroj.whatappslike.helper.FirebaseConstants.USERS_PATH
 import com.luisppinheiroj.whatappslike.helper.InputHelper
+import com.luisppinheiroj.whatappslike.ui.base.BaseActivity
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_register.*
 
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity(){
 
 
     public val TAG : String = "login_activity"
@@ -32,13 +31,14 @@ class RegisterActivity : AppCompatActivity() {
     @BindView(R.id.user_register_btn)
     lateinit var registerBtn : Button
 
+    @BindView(R.id.register_login_btn)
+    lateinit var loginBtn : Button
+
     @BindView(R.id.register_name_field)
     lateinit var nameField : EditText
 
     @BindView(R.id.register_email_field)
     lateinit var emailField : EditText
-
-
 
     @BindView(R.id.register_password_field)
     lateinit var passwordField : EditText
@@ -59,14 +59,13 @@ class RegisterActivity : AppCompatActivity() {
 
         user_register_btn.setOnClickListener {
 
-
             if (InputHelper.isEmpty(emailField) || InputHelper.isEmpty(nameField)) {
-                Toasty.error(this, "You Should Type Your Information").show()
+                Toasty.error(this, getString(R.string.empty_field_msg)).show()
             } else if (InputHelper.isEmpty(passwordField)) {
-                Toasty.error(this, "The password is  not Valid").show()
+                Toasty.error(this, getString(R.string.password_not_valid_msg)).show()
             } else if (passwordField.text.toString() != confirmPasswordField.text.toString()){
                 //Toasty.error(this, "The Two passwords are not The same").show()
-                confirmPasswordField.error ="The Two passwords are not The same"
+                confirmPasswordField.error =getString(R.string.error_different_passwords_msg)
             }else{
                 val email = emailField.text.toString()
                 val password = passwordField.text.toString()
@@ -86,12 +85,15 @@ class RegisterActivity : AppCompatActivity() {
                             goToLoginActivity()
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
+                            showMessage("Registration failed. "+ task.exception?.message)
                         }
                     }
             }
 
+        }
+
+        loginBtn.setOnClickListener {
+            goToLoginActivity()
         }
     }
 

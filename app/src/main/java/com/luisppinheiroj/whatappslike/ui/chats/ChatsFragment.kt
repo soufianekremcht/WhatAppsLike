@@ -1,15 +1,18 @@
 package com.luisppinheiroj.whatappslike.ui.chats
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.LinearLayout.VERTICAL
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.firebase.auth.FirebaseAuth
@@ -28,39 +31,43 @@ import com.luisppinheiroj.whatappslike.helper.FirebaseConstants.USERS_CHATS_PATH
 import com.luisppinheiroj.whatappslike.helper.FirebaseConstants.USERS_PATH
 import com.luisppinheiroj.whatappslike.ui.base.BaseFragment
 import com.luisppinheiroj.whatappslike.ui.chat_room.ChatRoomActivity
+import com.luisppinheiroj.whatappslike.ui.main.MainActivity
+import com.luisppinheiroj.whatappslike.ui.views.ChatDividerItemDecoration
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_network_error.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ChatsFragment: BaseFragment(),ChatsMvp.View{
+class ChatsFragment : BaseFragment(), ChatsAdapter.ChatsAdapterListener {
 
 
+    @BindView(R.id.chats_refresh_layout)
+    lateinit var chatsRefreshLayout: SwipeRefreshLayout
 
     @BindView(R.id.chats_recycler_view)
-    lateinit var chatsRecyclerView : RecyclerView
+    lateinit var chatsRecyclerView: RecyclerView
 
     @BindView(R.id.empty_list_layout)
-    lateinit var empty_list_view :LinearLayout
+    lateinit var emptyListView: LinearLayout
 
     @BindView(R.id.network_error_layout)
-    lateinit var networkErrorLayout :LinearLayout
+    lateinit var networkErrorLayout: LinearLayout
 
 
     @BindView(R.id.chats_progressbar)
-    lateinit var chatsProgressBar : ProgressBar
+    lateinit var chatsProgressBar: ProgressBar
 
-    lateinit var chatsAdapter : ChatsAdapter
+    lateinit var chatsAdapter: ChatsAdapter
 
-    private lateinit var mPresenter :ChatsPresenter<ChatsMvp.View>
+    private lateinit var currentAppUserUid :String
+    private lateinit var currentAppUserObject : UserObject
+    private var chatsList: ArrayList<ChatObject> = ArrayList()
 
-    private lateinit var currentUserUID :String
-    private var chatsList : ArrayList<ChatObject> = ArrayList()
 
-
-    companion object{
-        fun newInstance(): ChatsFragment{
+    companion object {
+        fun newInstance(): ChatsFragment {
             val args = Bundle()
 
             val fragment = ChatsFragment()
@@ -76,41 +83,46 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?
+    ): View? {
 
-        val view = LayoutInflater.from(activity).inflate(R.layout.fragment_chats,container,false)
-        ButterKnife.bind(this,view)
-        mPresenter = ChatsPresenter()
-        mPresenter.onAttach(this)
-        currentUserUID = FirebaseAuth.getInstance().currentUser!!.uid
+        val view = LayoutInflater.from(activity).inflate(R.layout.fragment_chats, container, false)
+        ButterKnife.bind(this, view)
+        currentAppUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         return view
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // show only the progress bar
-        chatsProgressBar.visibility = View.VISIBLE
+
         networkErrorLayout.visibility = View.GONE
         chatsRecyclerView.visibility = View.GONE
-        empty_list_view.visibility = View.GONE
-
-        chatsRecyclerView.layoutManager = LinearLayoutManager(activity,
-            LinearLayoutManager.VERTICAL,false)
+        emptyListView.visibility = View.GONE
+        val linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        //linearLayoutManager.reverseLayout = true
+        //linearLayoutManager.stackFromEnd = true
+        chatsRecyclerView.layoutManager = LinearLayoutManager(activity)
+        chatsRecyclerView.addItemDecoration(ChatDividerItemDecoration(activity!!, VERTICAL, 16))
         chatsRecyclerView.itemAnimator = DefaultItemAnimator()
-        chatsAdapter = ChatsAdapter(context!!,chatsList,this)
+        chatsAdapter = ChatsAdapter(context!!, chatsList, this)
         chatsRecyclerView.adapter = chatsAdapter
-        setupChats()
 
+        chatsRefreshLayout.setOnRefreshListener {
+            chatsList = ArrayList()
+            setupChats()
+            chatsRefreshLayout.isRefreshing = false
+            showMessage(getString(R.string.list_refresh_msg))
+        }
     }
-
 
 
     override fun onStart() {
         super.onStart()
-
         setupChats()
     }
+
     override fun onResume() {
         super.onResume()
     }
@@ -121,104 +133,110 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
 
     override fun onDestroy() {
         // remove All Listeners
+        removeAllDbListeners()
         super.onDestroy()
     }
 
 
-    private fun setupChats(){
-        if (AppHelper.isNetworkStatusAvialable(context!!)){
+    private fun setupChats() {
+        if (AppHelper.isNetworkStatusAvialable(context!!)) {
+            // DATA NoT BEING FETCHED FAST
             getUserChatList()
-        }else{
+        } else {
             showNetworkErrorView()
         }
 
     }
 
 
-
-
     private fun getUserChatList() {
+        chatsProgressBar.visibility = View.VISIBLE
+
         val mUserChatDB = FirebaseDatabase.getInstance().reference
             .child(USERS_PATH)
-            .child(currentUserUID)
+            .child(currentAppUserUid)
             .child(USERS_CHATS_PATH)
 
         mUserChatDB.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-
-                    for ((i, childSnapshot) in dataSnapshot.children.withIndex()) {
-
-                        val retrievedChat = ChatObject(childSnapshot.key!!, "last message " + i,
-                            Date().time, false, "Testing "+ i,null,
-                            false)
-
-                        // If The Chat Is Already Existed
-                        var exists = false
-                        for (chat in chatsList) {
-                            if (chat.chatId.equals(retrievedChat.chatId))
-                                exists = true
-                        }
-                        if (exists) continue
-
-
-                        retrievedChat.snippet ="My Snippet"
-
-                        chatsList.add(retrievedChat)
-                        getChatData(retrievedChat)
-
-
+                    for (chatsIdSnapshot in dataSnapshot.children) {
+                        val chatUid = chatsIdSnapshot.key!!
+                        getChatData(chatUid)
                     }
+                }else{
                     checkEmptyView()
-
                 }
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                activity?.let { Toasty.error(it,databaseError.message).show() }
+                Toasty.error(activity!!, databaseError.message).show()
                 checkEmptyView()
             }
         })
     }
 
-    private fun getChatData(currentChat: ChatObject) {
+    private fun getChatData(chatUid : String) {
         val mChatInfoDB = FirebaseDatabase.getInstance().reference
             .child(CHATS_PATH)
-            .child(currentChat.chatId!!)
+            .child(chatUid)
             .child(CHATS_INFO_PATH)
 
-        mChatInfoDB.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    var lastMessage = ""
+        mChatInfoDB.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(chatDataSnapshot: DataSnapshot) {
+                if (chatDataSnapshot.exists()) {
+                    val currentChat = ChatObject(chatUid, "S",
+                        Date().time, false, "T", null,
+                        false)
+
+                    var title = ""
+                    var lastMessage = "Info : New Chat Has Been Created !!!!"
                     var timeStamp: Long = Date().time
+                    // chat info
 
-                    val retrievedChatId = dataSnapshot.child("id").value.toString()
+                    val currentChatId = chatDataSnapshot.child("id").value.toString()
+                    if (chatDataSnapshot.child("title").value != null)
+                        title = chatDataSnapshot.child("title").value.toString()
 
-                    if (dataSnapshot.child("lastMessage").value != null)
-                        lastMessage = dataSnapshot.child("lastMessage").value.toString()
+                    if (chatDataSnapshot.child("lastMessage").value != null)
+                        lastMessage = chatDataSnapshot.child("lastMessage").value.toString()
 
-                    if (dataSnapshot.child("timestamp").value != null)
-                        timeStamp = dataSnapshot.child("timestamp").value.toString().toLong()
+                    if (chatDataSnapshot.child("timestamp").value != null)
+                        timeStamp = chatDataSnapshot.child("timestamp").value.toString().toLong()
 
                     /*** Testing  ***/
 
                     currentChat.snippet = lastMessage
                     currentChat.date = timeStamp
+                    currentChat.title = title
 
-                    // Problem Here : Still Confusing
-                    // Search For All The Participants In The Chat
-                    for (participantSnapshot in dataSnapshot.child(USERS_PATH).children) {
-                        var participantUid = ""
-                        if (participantSnapshot.key != null){
-                            participantUid = participantSnapshot.key!!
-                            getParticipantInfo(participantUid, currentChat)
+                    // TODO : TEST CHAT LOADING HERE
 
+                    var exists = false
+                    for (chat in chatsList) {
+                        if (chat.chatId.equals(currentChat.chatId))
+                            exists = true
+                    }
+                    if (!exists) {
+                        // add the new chat in the top
+                        if (chatsList.isEmpty()) chatsList.add(currentChat)
+                        else chatsList.add(0,currentChat)
 
+                        // Problem Here : Still Confusing
+                        // Search For All The Participants In The Chat
+                        for (participantSnapshot in chatDataSnapshot.child(USERS_PATH).children) {
+                            var participantUid = ""
+                            if (participantSnapshot.key != null) {
+                                participantUid = participantSnapshot.key!!
+                                getParticipantInfo(participantUid, currentChat)
+                            }
                         }
                     }
 
                 }
+
+                checkEmptyView()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -228,35 +246,43 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
         })
     }
 
-    private fun getParticipantInfo(userUid : String,chat :ChatObject){
+    private fun getParticipantInfo(userUid: String, chat: ChatObject) {
         val userInfoRef = FirebaseDatabase.getInstance().reference
             .child(USERS_PATH).child(userUid)
-        userInfoRef.addListenerForSingleValueEvent(object :ValueEventListener{
+        userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(userInfosnapshot: DataSnapshot) {
-                if (userInfosnapshot.exists()){
+                if (userInfosnapshot.exists()) {
+                    val name: String = userInfosnapshot.child("name").value.toString()
+                    val email: String = userInfosnapshot.child("email").value.toString()
+                    val participant = UserObject(userUid, email, name)
 
-                    val name : String = userInfosnapshot.child("name").value.toString()
-                    val email : String = userInfosnapshot.child("email").value.toString()
-                    val participant = UserObject(userUid,email,name)
-
-                    if (!chat.participantUsers.contains(participant)){
+                    if (!chat.participantUsers.contains(participant))
                         chat.participantUsers.add(participant)
+                    if (participant.uid == currentAppUserUid){
+                        currentAppUserObject = participant
+                        getMainActivity().main_toolbar_title.text= getString(R.string.chats)+ " : " + participant.name
+
+                        getMainActivity().main_toolbar_sub_title.text = participant.email
+
                     }
 
-                    // Set Title For The Chat
-                    if (chat.participantUsers.size>2 && !chat.title.contains(" Group")){
-                        chat.title += " Group"
-                    }
-                    else{
-                        if (participant.name != FirebaseAuth.getInstance().currentUser!!.displayName){
-                            chat.title = participant.name + " Chat"
-                        }
+                    // Set Title For The Group Chat
+                    if (chat.participantUsers.size > 2 && !chat.title.contains("Group ")) {
+                        chat.isGroupConversation = true
+                        chat.title = "GROUP : " + chat.title
                     }
                     chatsAdapter.notifyDataSetChanged()
                     checkEmptyView()
+                    // scroll to the top
+                    if (chatsList.isNotEmpty())
+                        chatsRecyclerView.smoothScrollToPosition(0)
+
+
 
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 onError("GetParticipantInfo", error.message)
                 checkEmptyView()
@@ -267,16 +293,16 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
     }
 
 
-
-    private fun  checkEmptyView(){
+    private fun checkEmptyView() {
         networkErrorLayout.visibility = View.GONE
         chatsProgressBar.visibility = View.GONE
-        if (chatsAdapter.itemCount<1){
+
+        if (chatsAdapter.itemCount < 1) {
             chatsRecyclerView.visibility = View.GONE
-            empty_list_view.visibility = View.VISIBLE
-        }else{
+            emptyListView.visibility = View.VISIBLE
+        } else {
             chatsRecyclerView.visibility = View.VISIBLE
-            empty_list_view.visibility = View.GONE
+            emptyListView.visibility = View.GONE
         }
 
     }
@@ -285,7 +311,8 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
         chatsProgressBar.visibility = View.GONE
         networkErrorLayout.visibility = View.VISIBLE
 
-        no_internet_reload_btn.setOnClickListener{
+
+        no_internet_reload_btn.setOnClickListener {
             chatsProgressBar.visibility = View.VISIBLE
             networkErrorLayout.visibility = View.GONE
             setupChats()
@@ -295,14 +322,16 @@ class ChatsFragment: BaseFragment(),ChatsMvp.View{
 
 
     override fun onChatClicked(chat: ChatObject) {
-        var intent : Intent = Intent(activity,ChatRoomActivity::class.java)
-        intent.putExtra(AppConstants.CHATS_OBJECT,chat)
+        val intent = Intent(activity, ChatRoomActivity::class.java)
+        intent.putExtra(AppConstants.CHATS_OBJECT, chat)
         startActivity(intent)
     }
 
 
-    private fun removeAllDbListeners(){
+    private fun removeAllDbListeners() {
 
     }
+
+    private fun getMainActivity() = activity!! as MainActivity
 
 }

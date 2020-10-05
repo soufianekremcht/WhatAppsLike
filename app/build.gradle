@@ -18,11 +18,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
@@ -42,26 +42,25 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     api "androidx.emoji:emoji:1.1.0"
 
     // UI
     implementation 'com.github.GrenderG:Toasty:1.5.0'
-    implementation 'com.afollestad.material-dialogs:core:3.2.1'
+    implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation 'com.l4digital.fastscroll:fastscroll:2.0.1'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Firebase
     implementation 'com.google.firebase:firebase-auth-ktx:19.4.0'
+
     // sign in ui
-    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    // implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
 
     implementation 'com.google.firebase:firebase-database-ktx:19.5.0'
     implementation 'com.google.firebase:firebase-storage:19.2.0'
-
-    implementation 'com.facebook.fresco:fresco:1.10.0'
-    implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
 
     implementation 'com.jakewharton:butterknife:10.2.1'
     kapt 'com.jakewharton:butterknife-compiler:10.2.1'

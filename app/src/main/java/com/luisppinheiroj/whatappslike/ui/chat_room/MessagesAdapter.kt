@@ -36,7 +36,7 @@ class MessagesAdapter(var mContext :Context, var chatMessages : ArrayList<ChatMe
         val layout : Int = when(viewType){
             VIEW_RECEIVED_MESSAGE -> R.layout.item_received_msg
             VIEW_SENT_MESSAGE -> R.layout.item_sent_msg
-            else -> R.layout.item_sent_msg
+            else -> R.layout.item_received_msg
         }
         val view = LayoutInflater.from(mContext).inflate(layout,parent,false)
         return ChatRoomViewHolder(view)
@@ -85,17 +85,15 @@ class MessagesAdapter(var mContext :Context, var chatMessages : ArrayList<ChatMe
                 val receivedMsgSenderName : TextView = itemView.received_msg_sender_name
                 val receivedMsgDate : TextView = itemView.received_msg_date_text
 
-                receivedMsgSenderName.text = "Name"
+                receivedMsgSenderName.text = message.sender.name
                 receivedMsgDate.text = MyTimeUtils.formatTimestamp(mContext,message.date)
 
                 // show sender name
                 receivedMsgSenderName.visibility = View.VISIBLE
 
                 receivedMsgBody.text = message.body
-
                 if (!InputHelper.isEmpty(message.sender.name))
-                    receivedMsgSenderPhotoText.text = message.sender.name.substring(0,1)
-
+                    receivedMsgSenderPhotoText.text = message.sender.name.substring(0,1).toUpperCase()
                 receivedMsgSenderPhoto.setColorFilter(
                     AppHelper.getRandomMaterialColor(mContext, "400"))
 

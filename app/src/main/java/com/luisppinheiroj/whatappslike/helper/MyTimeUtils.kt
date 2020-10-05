@@ -10,7 +10,7 @@ object MyTimeUtils {
     val now: Long
         get() = Date().time
 
-    val SECOND: Long = 1000
+    const val SECOND: Long = 1000
     val MINUTE = SECOND * 60
     val HOUR = MINUTE * 60
     val DAY = HOUR * 24
@@ -163,7 +163,7 @@ object MyTimeUtils {
                     formatTime(context, date)
         }
 
-        return formatted ?: ""
+        return formatted
     }
 
     /**

@@ -15,6 +15,7 @@ object FirebaseConstants {
 
     const val CHATS_MESSAGES_PATH = "messages"
 
+
     const val MESSAGES_SENDER_ID_PATH = "sender"
     const val MESSAGES_TEXT_PATH = "text"
     const val MESSAGES_TIMESTAMP_PATH = "timestamp"

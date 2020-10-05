@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.luisppinheiroj.whatappslike.R
 import com.luisppinheiroj.whatappslike.data.model.ChatObject
 import com.luisppinheiroj.whatappslike.helper.AppHelper
+import com.luisppinheiroj.whatappslike.helper.InputHelper
 import com.luisppinheiroj.whatappslike.helper.MyTimeUtils
 import kotlinx.android.synthetic.main.item_conversation.view.*
+import java.util.*
 
 class ChatsAdapter(var mContext : Context, var chatObjects :ArrayList<ChatObject>,var listener : ChatsAdapterListener)
     : RecyclerView.Adapter<ChatsAdapter.ConversationViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_conversation,parent,false)
@@ -31,9 +34,9 @@ class ChatsAdapter(var mContext : Context, var chatObjects :ArrayList<ChatObject
     }
 
     fun add(chat :ChatObject){
-        chatObjects.add(chat)
+        chatObjects.add(0,chat)
         //
-        notifyItemInserted(chatObjects.size)
+        notifyItemInserted(0)
     }
     fun addAll(chats:List<ChatObject>){
         chatObjects.clear()
@@ -59,18 +62,19 @@ class ChatsAdapter(var mContext : Context, var chatObjects :ArrayList<ChatObject
 
         var chatLastMsg : TextView = itemView.chat_last_message_text
         var chatMsgTimestamp : TextView = itemView.chat_message_timestamp
-        var chatMsgSender : TextView = itemView.message_sender
+        var chatTitleText : TextView = itemView.message_sender
 
         fun onBind(position: Int){
             val chatObject = chatObjects[position]
 
             chatMsgTimestamp.text = MyTimeUtils.formatConversationTimestamp(mContext,chatObject.date)
             chatLastMsg.text = chatObject.snippet
-            chatMsgSender.text = chatObject.title
+            chatTitleText.text = chatObject.title
 
             chatIconFrontImg.setColorFilter(AppHelper.getRandomMaterialColor(mContext,"500"))
 
-            chatIconText.text = chatObject.title.subSequence(0,1)
+            if (!InputHelper.isEmpty(chatObject.title) && !chatObject.isGroupConversation)
+                chatIconText.text = chatObject.title.substring(0,1).toUpperCase(Locale.getDefault())
 
 
             chatItemLayout.setOnClickListener{
